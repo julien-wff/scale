@@ -2,40 +2,44 @@
     import * as Sidebar from '$lib/components/ui/sidebar';
     import { Input } from '$lib/components/ui/input';
     import { Label } from '$lib/components/ui/label';
-    import { Separator } from '$lib/components/ui/separator';
     import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from '$lib/components/ui/select';
-    import Filter from '@lucide/svelte/icons/filter';
-    import Flame from '@lucide/svelte/icons/flame';
+    import Thermometer from '@lucide/svelte/icons/thermometer';
 
-    // Controlled by parent via props
-    let {
-        q = '',
-        onSearch = (v: string) => {},
-        techs = [] as string[],
-        onTechChange = (v: string) => {},
-        minTemp = 0,
-        maxTemp = 100,
-        onTempChange = (a: { min: number; max: number }) => {},
-    } = $props();
+    interface Props {
+        q: string;
+        onSearch: (v: string) => void;
+        techs: string[];
+        onTechChange: (v: string) => void;
+    }
+
+    let { q = '', onSearch = (v: string) => {}, techs = [] as string[], onTechChange = (v: string) => {} } = $props();
 </script>
 
 <Sidebar.Root>
     <Sidebar.Content>
         <Sidebar.Header>
-            <div class="flex items-center gap-2">
-                <Filter class="size-5" />
-                <span class="font-semibold">Filters</span>
-            </div>
+            <Sidebar.Menu>
+                <Sidebar.MenuItem>
+                    <Sidebar.MenuButton size="lg">
+                        {#snippet child({ props })}
+                            <a href="/" {...props}>
+                                <div class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                                    <Thermometer class="size-4" />
+                                </div>
+                                <div class="flex flex-col gap-0.5 leading-none">
+                                    <span class="font-semibold">Scale</span>
+                                </div>
+                            </a>
+                        {/snippet}
+                    </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+            </Sidebar.Menu>
         </Sidebar.Header>
 
         <div class="p-2">
-            <Label class="text-xs">Search</Label>
-            {#key q}
-                <Input placeholder="Search projects..." bind:value={q} oninput={() => onSearch(q)} />
-            {/key}
+            <Label class="text-xs mb-2">Search</Label>
+            <Input placeholder="Search projects..." bind:value={q} oninput={() => onSearch(q)} />
         </div>
-
-        <Separator />
 
         <div class="p-2 space-y-2">
             <Label class="text-xs">Technology</Label>
@@ -54,33 +58,8 @@
             </Select>
         </div>
 
-        <Separator />
-
-        <div class="p-2 space-y-1">
-            <Label class="text-xs flex items-center gap-2"><Flame class="size-4" /> Priority</Label>
-            <div class="flex items-center gap-2 text-xs">
-                <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    class="w-14 rounded-md border bg-background p-1"
-                    bind:value={minTemp}
-                    onchange={() => onTempChange({ min: Number(minTemp), max: Number(maxTemp) })}
-                />
-                <span>to</span>
-                <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    class="w-14 rounded-md border bg-background p-1"
-                    bind:value={maxTemp}
-                    onchange={() => onTempChange({ min: Number(minTemp), max: Number(maxTemp) })}
-                />
-                <span>%</span>
-            </div>
-        </div>
-
         <Sidebar.Separator />
+
         <Sidebar.Footer>
             <p class="text-[10px] text-muted-foreground">Tip: use the upload button to add a new project PDF.</p>
         </Sidebar.Footer>

@@ -53,31 +53,19 @@
 </script>
 
 <SidebarProvider>
-    <AppSidebar
-        {q}
-        onSearch={(v: string) => (q = v)}
-        techs={Array.from(new Set(projects.flatMap((p: ProjectListItem) => p.tags))) as string[]}
-        onTechChange={(v: string) => (tech = v)}
-        {minTemp}
-        {maxTemp}
-        onTempChange={({ min, max }: { min: number; max: number }) => {
-            minTemp = min;
-            maxTemp = max;
-        }}
-    />
+    <AppSidebar {q} onSearch={(v: string) => (q = v)} techs={Array.from(new Set(projects.flatMap((p: ProjectListItem) => p.tags))) as string[]} onTechChange={(v: string) => (tech = v)} />
     <SidebarInset>
         <!-- Top bar -->
         <div class="flex h-14 items-center gap-3 border-b px-4">
             <SidebarTrigger />
             <h1 class="text-xl font-semibold">Opportunities</h1>
-            <div class="mx-4 hidden sm:flex items-center gap-2">
-                <Search class="size-4 text-muted-foreground" />
-                <Input placeholder="Search projects..." bind:value={q} class="w-72" />
-            </div>
             <div class="ml-auto">
                 <Sheet>
                     <SheetTrigger>
-                        <Button class="gap-2"><Plus class="size-4" /> Add project</Button>
+                        <Button class="gap-2">
+                            <Plus class="size-4" />
+                            Add project
+                        </Button>
                     </SheetTrigger>
                     <SheetContent class="w-96">
                         <SheetHeader>
@@ -102,13 +90,12 @@
 
         <!-- Content -->
         <div class="p-4">
-            <h2 class="mb-3 text-lg font-medium">Opportunities</h2>
-            <Separator class="mb-4" />
             <ScrollArea class="h-[calc(100vh-8rem)] pr-2">
                 <div class="grid gap-3">
                     {#each filtered() as p (p.id)}
                         <ProjectCard item={p} />
                     {/each}
+
                     {#if filtered().length === 0}
                         <p class="text-sm text-muted-foreground">No projects match your filters.</p>
                     {/if}
