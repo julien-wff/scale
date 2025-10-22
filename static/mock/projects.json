@@ -18,5 +18,72 @@
             }
         },
         "temperatures": { "sub_temperatures": { "geolocation": 15, "technical": 12, "time": 13, "budget": 23 }, "global_temperature": 63, "recommendation": "Medium Priority" }
+    },
+    {
+        "projectId": "139a46df07d842eaf1ea2092f8a505a2",
+        "filename": "Project_2",
+        "title": "Consultation for Experienced Back and Front PHP-Symfony Developer for Digital-Hub Project",
+        "short_description": "This consultation seeks an experienced PHP-Symfony developer (back and front-end) to ensure the continuity and industrial deployment of the existing Digital-Hub tool, used nationally by GRDF and its service providers. The mission involves technical steering, coordination, and co-design workshops, focusing on integrating a SaaS solution and improving the tool's functionalities.",
+        "long_description": {
+            "context_and_objectives": "GRDF is a major global gas distribution group. This consultation concerns an intellectual and IT service focused on an existing IT tool called Digital-Hub, used by GRDF and its service providers. Digital-Hub is a national tool with approximately 540 monthly back-office users, 5962 monthly mobile application entries, and 50 different forms. The project aims to integrate a SaaS solution into Digital-Hub.",
+            "results_and_impact": "The expected deliverables include all produced code and documentation, with developments to be carried out according to current standards.",
+            "additional_details": "The current development team consists of 6 people: a project manager, 4 developers, and 1 DevOps engineer. The mission involves ensuring the continuity of the Digital-Hub project's industrial deployment, including monitoring deployment objective prioritization, technical steering of a design team, coordination between different departments, and leading co-design workshops with users and business experts."
+        },
+        "metrics": {
+            "geolocalisation": {
+                "type": "on-site",
+                "location": "Toulouse",
+                "logistics_details": "Not specified"
+            },
+            "time": {
+                "start_date": "17/11/2025",
+                "duration": "medium",
+                "urgency": "not specified"
+            },
+            "technical": {
+                "technologies": ["PHP-Symfony", "CSS", "Javascript", "Jenkins", "Docker", "Ansible", "Git", "C# .NET 8", "SQL Server", "IIS", "Azure"],
+                "number_of_positions": 1,
+                "expertise_level": "expert",
+                "internal_fit": "not specified"
+            },
+            "budget_previsions": {
+                "estimated_budget": "210 days (7 months)",
+                "contract_type": "not specified",
+                "financial_details": "Awarding based on technical (60%) and financial (40%) criteria."
+            }
+        },
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "budget": {
+            "billing": {
+                "total_billing": 199456,
+                "daily_rate_per_profile": 1280,
+                "total_days": 135.5,
+                "number_of_profiles": 1
+            },
+            "costs": {
+                "total_salary_costs": 108400,
+                "total_logistics_costs": 13550,
+                "total_overheads": 21680,
+                "risk_buffer": 14959.2,
+                "total_costs": 158589.2
+            },
+            "profitability": {
+                "gross_margin": 55826,
+                "net_margin": 40866.8,
+                "profitability_ratio": 20.49
+            },
+            "break_even": true
+        },
+        "temperatures": {
+            "sub_temperatures": {
+                "geolocation": 8,
+                "technical": 12,
+                "time": 20,
+                "budget": 17
+            },
+            "global_temperature": 57,
+            "recommendation": "Medium Priority"
+        }
     }
 ]
