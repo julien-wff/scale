@@ -2,19 +2,18 @@
     import { SidebarProvider, SidebarInset, SidebarTrigger } from '$lib/components/ui/sidebar';
     import AppSidebar from '$lib/components/AppSidebar.svelte';
     import { Button } from '$lib/components/ui/button';
-    import { Input } from '$lib/components/ui/input';
     import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '$lib/components/ui/sheet';
     import { ScrollArea } from '$lib/components/ui/scroll-area';
-    import { Separator } from '$lib/components/ui/separator';
     import ProjectCard from '$lib/components/ProjectCard.svelte';
     import { toListItem, type Project, type ProjectListItem } from '$lib/types';
-    import { uploadProject } from '$lib/api';
+    import { fetchProjects, uploadProject } from '$lib/api';
     import Plus from '@lucide/svelte/icons/plus';
-    import Search from '@lucide/svelte/icons/search';
+    import LoaderCircle from '@lucide/svelte/icons/loader-circle';
     import Upload from '@lucide/svelte/icons/upload';
+    import { onMount } from 'svelte';
 
-    let { data } = $props<{ data: { projects: Project[] } }>();
-    let projects: ProjectListItem[] = $state((data?.projects ?? []).map(toListItem));
+    let projects: ProjectListItem[] = $state([]);
+    let loading = $state(true);
 
     // Filters/search
     let q = $state('');
@@ -22,8 +21,9 @@
     let minTemp = $state(0);
     let maxTemp = $state(100);
 
-    $effect(() => {
-        projects = (data?.projects ?? []).map(toListItem);
+    onMount(async () => {
+        projects = (await fetchProjects()).map(toListItem);
+        loading = false;
     });
 
     function filtered(): ProjectListItem[] {
@@ -41,8 +41,7 @@
         if (!file) return;
         try {
             const created = await uploadProject(file);
-            data.projects = [created, ...data.projects];
-            projects = data.projects.map(toListItem);
+            projects = [toListItem(created), ...projects];
             file = null;
             alert('Upload completed');
         } catch (e) {
@@ -96,8 +95,14 @@
                         <ProjectCard item={p} />
                     {/each}
 
-                    {#if filtered().length === 0}
+                    {#if filtered().length === 0 && loading === false}
                         <p class="text-sm text-muted-foreground">No projects match your filters.</p>
+                    {/if}
+
+                    {#if loading}
+                        <div class="flex flex-col items-center justify-center gap-2 mt-10">
+                            <LoaderCircle class="size-8 animate-spin" />
+                        </div>
                     {/if}
                 </div>
             </ScrollArea>
