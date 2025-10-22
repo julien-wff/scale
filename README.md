@@ -1,38 +1,68 @@
-# sv
+# Project Scanner UI (SvelteKit + shadcn-svelte)
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+This app lets you upload project requests as PDFs and browse parsed opportunities in a clean list, with filters in a sidebar.
 
-## Creating a project
+Tech: SvelteKit (Svelte 5), Tailwind CSS v4, shadcn-svelte, lucide-svelte, Bun.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Quick start
 
-```sh
-# create a new project in the current directory
-npx sv create
+```bash
+# install deps
+bun install
 
-# create a new project in my-app
-npx sv create my-app
+# run dev
+bun run dev
+
+# build / preview
+bun run build
+bun run preview
 ```
 
-## Developing
+Open http://localhost:5173.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Configure the API
 
-```sh
-npm run dev
+Set your backend base URL so the UI can load and upload projects:
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+Create a `.env` file at the project root with:
+
+```
+PUBLIC_API_URL=https://your-api.example.com
 ```
 
-## Building
+If `PUBLIC_API_URL` is not set, the UI falls back to a local mock at `static/mock/projects.json` so you can see the UI immediately.
 
-To create a production version of your app:
+## UI notes
 
-```sh
-npm run build
+-   Sidebar filters: search, technology, and priority range.
+-   Upload button (top-right): opens a Sheet to upload a PDF to `POST ${PUBLIC_API_URL}/projects/upload`.
+-   List items show name, company (if present), tags, start date, duration, short description, and a temperature bar.
+
+## shadcn-svelte components
+
+Added components include: button, input, badge, card, separator, scroll-area, progress, tooltip, sheet, sidebar, skeleton, textarea, select, label, form, avatar, breadcrumb.
+
+Use Bun to add more components if needed:
+
+```bash
+bunx --bun shadcn-svelte add <component>
 ```
 
-You can preview the production build with `npm run preview`.
+Icons are from `@lucide/svelte` — import per-icon:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```ts
+import Plus from '@lucide/svelte/icons/plus';
+```
+
+## File map
+
+-   `src/lib/api.ts` – tiny client for fetching and uploading projects.
+-   `src/lib/types.ts` – types and mapper to the UI list shape.
+-   `src/lib/components/AppSidebar.svelte` – sidebar with filters.
+-   `src/lib/components/ProjectCard.svelte` – card used in the list.
+-   `src/routes/+page.{ts,svelte}` – data load and main page UI.
+
+## Troubleshooting
+
+-   If shadcn CLI warns about Node version on Bun, you can still proceed — components will be added correctly.
+-   If upload fails, verify `PUBLIC_API_URL` and CORS for the endpoint `/projects/upload`.

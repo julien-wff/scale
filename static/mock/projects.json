@@ -1,0 +1,22 @@
+[
+    {
+        "projectId": "3215b1a4ac4c0d49c999b0f77fca2047",
+        "title": "Ingénieur DevOps Kubernetes",
+        "short_description": "The Digital Solutions department is seeking a DevOps Kubernetes Engineer to join the Workstation service. The role involves engineering and administration of user environments using Terraform, Ansible, Docker, and Kubernetes, participating in technical improvements, incident resolution, and active technological watch. This position combines RUN and BUILD missions.",
+        "long_description": {
+            "context_and_objectives": "The Digital Solutions department is looking for a DevOps Kubernetes Engineer to integrate the Workstation service. The main objectives include engineering and administering user environments through Terraform/Ansible and Docker/Kubernetes solutions, participating in the improvement of technical components of the information system, and processing incidents or anomalies based on internal requests: incident diagnosis, identification, resolution if possible, or escalation to external support with resolution tracking. The engineer will also actively participate in technological watch. Within the Development team, the engineer will handle both RUN (operations) and BUILD (development) missions.",
+            "results_and_impact": "The expected outcomes include enhanced technical components of the information system, efficient resolution of user incidents and anomalies, and maintaining up-to-date technical knowledge through active technological watch. The role aims to ensure stable and continuously improving user environments.",
+            "additional_details": "A Master's degree (Bac +5 or equivalent) is required, along with 9 years of experience in a similar position. Required soft skills include analytical and synthesis skills, adaptability, stress management, technical leadership, and strong written and oral communication."
+        },
+        "metrics": {
+            "geolocalisation": { "type": "hybrid", "location": "Lille", "logistics_details": "Maximum 1 day/week remote work." },
+            "time": { "start_date": "ASAP", "duration": "6 months", "urgency": "yes" },
+            "technical": {
+                "technologies": ["Administration Linux RedHat/CentOS", "Terraform/Ansible", "Docker et Kubernetes", "PKI Microsoft Windows Server", "GPO et Stratégies de configuration"],
+                "number_of_positions": 1,
+                "expertise_level": "expert"
+            }
+        },
+        "temperatures": { "sub_temperatures": { "geolocation": 15, "technical": 12, "time": 13, "budget": 23 }, "global_temperature": 63, "recommendation": "Medium Priority" }
+    }
+]
