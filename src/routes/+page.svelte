@@ -28,7 +28,13 @@
 
     function filtered(): ProjectListItem[] {
         return projects.filter((p: ProjectListItem) => {
-            const matchQ = !q || [p.name, p.company, p.description, ...p.tags].filter(Boolean).join(' ').toLowerCase().includes(q.toLowerCase());
+            const matchQ =
+                !q ||
+                [p.name, p.company, p.description, ...p.tags]
+                    .filter(Boolean)
+                    .join(' ')
+                    .toLowerCase()
+                    .includes(q.toLowerCase());
             const matchTech = !tech || p.tags.includes(tech);
             const matchTemp = p.temperature >= minTemp && p.temperature <= maxTemp;
             return matchQ && matchTech && matchTemp;
@@ -40,8 +46,7 @@
     async function onUpload() {
         if (!file) return;
         try {
-            const created = await uploadProject(file);
-            projects = [toListItem(created), ...projects];
+            await uploadProject(file);
             file = null;
             alert('Upload completed');
         } catch (e) {
@@ -52,7 +57,12 @@
 </script>
 
 <SidebarProvider>
-    <AppSidebar {q} onSearch={(v: string) => (q = v)} techs={Array.from(new Set(projects.flatMap((p: ProjectListItem) => p.tags))) as string[]} onTechChange={(v: string) => (tech = v)} />
+    <AppSidebar
+        {q}
+        onSearch={(v: string) => (q = v)}
+        techs={Array.from(new Set(projects.flatMap((p: ProjectListItem) => p.tags))) as string[]}
+        onTechChange={(v: string) => (tech = v)}
+    />
     <SidebarInset>
         <!-- Top bar -->
         <div class="flex h-14 items-center gap-3 border-b px-4">
@@ -79,8 +89,13 @@
                                     file = t.files?.[0] ?? null;
                                 }}
                             />
-                            <Button class="gap-2" onclick={onUpload} disabled={!file}><Upload class="size-4" /> Upload</Button>
-                            <p class="text-xs text-muted-foreground">The backend will scan the PDF and return a project.</p>
+                            <Button class="gap-2" onclick={onUpload} disabled={!file}>
+                                <Upload class="size-4" />
+                                Upload
+                            </Button>
+                            <p class="text-xs text-muted-foreground">
+                                The backend will scan the PDF and return a project.
+                            </p>
                         </div>
                     </SheetContent>
                 </Sheet>
