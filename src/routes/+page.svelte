@@ -117,14 +117,14 @@
         </div>
 
         <!-- Content -->
-        <div class="p-4">
-            <ScrollArea class="h-[calc(100vh-8rem)] pr-2">
-                <div class="grid gap-3">
+        <div class="p-4 pb-0">
+            <ScrollArea class="h-[calc(100vh-var(--spacing)*18)]">
+                <div class="grid gap-3 pb-4">
                     {#each filtered() as p (p.id)}
                         <ProjectCard item={p} />
                     {/each}
 
-                    {#if filtered().length === 0 && loading === false}
+                    {#if filtered().length === 0 && !loading}
                         <p class="text-sm text-muted-foreground">No projects match your filters.</p>
                     {/if}
 
