@@ -10,10 +10,12 @@
     import Plus from '@lucide/svelte/icons/plus';
     import LoaderCircle from '@lucide/svelte/icons/loader-circle';
     import Upload from '@lucide/svelte/icons/upload';
+    import RefreshCw from '@lucide/svelte/icons/refresh-cw';
     import { onMount } from 'svelte';
 
     let projects: ProjectListItem[] = $state([]);
     let loading = $state(true);
+    let refreshing = $state(false);
 
     // Filters/search
     let q = $state('');
@@ -25,6 +27,12 @@
         projects = (await fetchProjects()).map(toListItem);
         loading = false;
     });
+
+    async function handleRefresh() {
+        refreshing = true;
+        projects = (await fetchProjects()).map(toListItem);
+        refreshing = false;
+    }
 
     function filtered(): ProjectListItem[] {
         return projects.filter((p: ProjectListItem) => {
@@ -69,6 +77,12 @@
             <SidebarTrigger />
             <h1 class="text-xl font-semibold">Opportunities</h1>
             <div class="ml-auto">
+                <Button variant="secondary" onclick={handleRefresh} disabled={refreshing}>
+                    <div class:animate-spin={refreshing}>
+                        <RefreshCw class="size-4" />
+                    </div>
+                    Refresh
+                </Button>
                 <Sheet>
                     <SheetTrigger>
                         <Button class="gap-2">
