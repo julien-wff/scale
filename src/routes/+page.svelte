@@ -1,15 +1,15 @@
 <script lang="ts">
+    import UploadSidebar from '$lib/components/UploadSidebar.svelte';
     import { SidebarProvider, SidebarInset, SidebarTrigger } from '$lib/components/ui/sidebar';
     import AppSidebar from '$lib/components/AppSidebar.svelte';
     import { Button } from '$lib/components/ui/button';
-    import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '$lib/components/ui/sheet';
+    import * as Sheet from '$lib/components/ui/sheet';
     import { ScrollArea } from '$lib/components/ui/scroll-area';
     import ProjectCard from '$lib/components/ProjectCard.svelte';
     import { toListItem, type ApiProject } from '$lib/types';
-    import { fetchProjects, uploadProject } from '$lib/api';
+    import { fetchProjects } from '$lib/api';
     import Plus from '@lucide/svelte/icons/plus';
     import LoaderCircle from '@lucide/svelte/icons/loader-circle';
-    import Upload from '@lucide/svelte/icons/upload';
     import RefreshCw from '@lucide/svelte/icons/refresh-cw';
     import { onMount } from 'svelte';
 
@@ -53,20 +53,6 @@
             return matchQ && matchTech && matchTemp;
         });
     }
-
-    // Upload
-    let file: File | null = $state(null);
-    async function onUpload() {
-        if (!file) return;
-        try {
-            await uploadProject(file);
-            file = null;
-            alert('Upload completed');
-        } catch (e) {
-            console.error(e);
-            alert('Upload failed. Check API URL.');
-        }
-    }
 </script>
 
 <SidebarProvider>
@@ -90,36 +76,16 @@
                     </div>
                     Refresh
                 </Button>
-                <Sheet>
-                    <SheetTrigger>
+                <Sheet.Root>
+                    <Sheet.Trigger>
                         <Button class="gap-2">
                             <Plus class="size-4" />
                             Add project
                         </Button>
-                    </SheetTrigger>
-                    <SheetContent class="w-96">
-                        <SheetHeader>
-                            <SheetTitle>Upload project PDF</SheetTitle>
-                        </SheetHeader>
-                        <div class="mt-4 space-y-3">
-                            <input
-                                type="file"
-                                accept="application/pdf"
-                                onchange={e => {
-                                    const t = e.target as HTMLInputElement;
-                                    file = t.files?.[0] ?? null;
-                                }}
-                            />
-                            <Button class="gap-2" onclick={onUpload} disabled={!file}>
-                                <Upload class="size-4" />
-                                Upload
-                            </Button>
-                            <p class="text-xs text-muted-foreground">
-                                The backend will scan the PDF and return a project.
-                            </p>
-                        </div>
-                    </SheetContent>
-                </Sheet>
+                    </Sheet.Trigger>
+
+                    <UploadSidebar onUpload={handleRefresh} {projects} />
+                </Sheet.Root>
             </div>
         </div>
 
