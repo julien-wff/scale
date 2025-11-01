@@ -1,9 +1,9 @@
 import { env as publicEnv } from '$env/dynamic/public';
-import type { Project } from './types';
+import type { ApiProject } from './types';
 
 const API_URL = publicEnv.PUBLIC_API_URL?.replace(/\/$/, '') || '';
 
-export async function fetchProjects(fetchFn: typeof fetch = fetch): Promise<Project[]> {
+export async function fetchProjects(fetchFn: typeof fetch = fetch): Promise<ApiProject[]> {
     const url = API_URL ? `${API_URL}/projects` : '/mock/projects.json';
 
     const res = await fetchFn(url, { headers: { accept: 'application/json' } });
@@ -14,14 +14,10 @@ export async function fetchProjects(fetchFn: typeof fetch = fetch): Promise<Proj
     const data = await res.json();
 
     if (Array.isArray(data)) {
-        return data as Project[];
+        return data as ApiProject[];
+    } else {
+        throw new Error('Invalid data format received from API');
     }
-
-    if (Array.isArray(data?.items)) {
-        return data.items as Project[];
-    }
-
-    return [data as Project];
 }
 
 export async function uploadProject(file: File, fetchFn: typeof fetch = fetch) {

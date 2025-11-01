@@ -1,3 +1,14 @@
+// Project from the API response (from DB)
+export interface ApiProject {
+    project_state: 'PROCESSING' | 'PROCESSED';
+    project_id: string;
+    project_meta: Project | null;
+    original_file_name: string;
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
 // Derived from the sample project JSON attached in chat
 export type Project = {
     projectId: string;

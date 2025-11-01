@@ -5,7 +5,7 @@
     import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '$lib/components/ui/sheet';
     import { ScrollArea } from '$lib/components/ui/scroll-area';
     import ProjectCard from '$lib/components/ProjectCard.svelte';
-    import { toListItem, type Project, type ProjectListItem } from '$lib/types';
+    import { toListItem, type ApiProject } from '$lib/types';
     import { fetchProjects, uploadProject } from '$lib/api';
     import Plus from '@lucide/svelte/icons/plus';
     import LoaderCircle from '@lucide/svelte/icons/loader-circle';
@@ -13,7 +13,7 @@
     import RefreshCw from '@lucide/svelte/icons/refresh-cw';
     import { onMount } from 'svelte';
 
-    let projects: ProjectListItem[] = $state([]);
+    let projects: ApiProject[] = $state([]);
     let loading = $state(true);
     let refreshing = $state(false);
 
@@ -24,27 +24,32 @@
     let maxTemp = $state(100);
 
     onMount(async () => {
-        projects = (await fetchProjects()).map(toListItem);
+        projects = await fetchProjects();
         loading = false;
     });
 
     async function handleRefresh() {
         refreshing = true;
-        projects = (await fetchProjects()).map(toListItem);
+        projects = await fetchProjects();
         refreshing = false;
     }
 
-    function filtered(): ProjectListItem[] {
-        return projects.filter((p: ProjectListItem) => {
+    function filtered(): ApiProject[] {
+        return projects.filter(({ project_meta: p, project_state: state }: ApiProject) => {
+            if (!p || state !== 'PROCESSED') return false;
+
+            const tags = p.metrics?.technical?.technologies || [];
             const matchQ =
                 !q ||
-                [p.name, p.company, p.description, ...p.tags]
+                [p.title, p.long_description, ...tags]
                     .filter(Boolean)
                     .join(' ')
                     .toLowerCase()
                     .includes(q.toLowerCase());
-            const matchTech = !tech || p.tags.includes(tech);
-            const matchTemp = p.temperature >= minTemp && p.temperature <= maxTemp;
+            const matchTech = !tech || tags.includes(tech);
+            const matchTemp =
+                (p.temperatures?.global_temperature ?? 0) >= minTemp &&
+                (p.temperatures?.global_temperature ?? 0) <= maxTemp;
             return matchQ && matchTech && matchTemp;
         });
     }
@@ -68,7 +73,9 @@
     <AppSidebar
         {q}
         onSearch={(v: string) => (q = v)}
-        techs={Array.from(new Set(projects.flatMap((p: ProjectListItem) => p.tags))) as string[]}
+        techs={Array.from(
+            new Set(projects.flatMap((p: ApiProject) => p.project_meta?.metrics?.technical?.technologies ?? [])),
+        )}
         onTechChange={(v: string) => (tech = v)}
     />
     <SidebarInset>
@@ -121,7 +128,7 @@
             <ScrollArea class="h-[calc(100vh-var(--spacing)*18)]">
                 <div class="grid gap-3 pb-4">
                     {#each filtered() as p (p.id)}
-                        <ProjectCard item={p} />
+                        <ProjectCard item={toListItem(p.project_meta!)} />
                     {/each}
 
                     {#if filtered().length === 0 && !loading}
