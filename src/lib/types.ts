@@ -14,6 +14,7 @@ export type Project = {
     projectId: string;
     filename?: string;
     title: string; // Project name
+    company_name: string;
     short_description?: string;
     long_description?: {
         context_and_objectives?: string;
@@ -52,7 +53,7 @@ export type Project = {
 export type ProjectListItem = {
     id: string;
     name: string;
-    company?: string;
+    company: string;
     tags: string[];
     startDate?: string;
     duration?: string;
@@ -64,7 +65,7 @@ export function toListItem(p: Project): ProjectListItem {
     return {
         id: String(p.projectId ?? crypto.randomUUID()),
         name: p.title ?? 'Untitled',
-        company: (p as any).company ?? undefined,
+        company: p.company_name,
         tags: p.metrics?.technical?.technologies ?? [],
         startDate: p.metrics?.time?.start_date,
         duration: p.metrics?.time?.duration,
