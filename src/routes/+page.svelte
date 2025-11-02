@@ -63,6 +63,7 @@
             new Set(projects.flatMap((p: ApiProject) => p.project_meta?.metrics?.technical?.technologies ?? [])),
         )}
         onTechChange={(v: string) => (tech = v)}
+        selectedTech={tech}
     />
     <SidebarInset>
         <!-- Top bar -->

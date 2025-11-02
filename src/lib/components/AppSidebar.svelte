@@ -1,7 +1,6 @@
 <script lang="ts">
     import * as Sidebar from '$lib/components/ui/sidebar';
     import { Input } from '$lib/components/ui/input';
-    import { Label } from '$lib/components/ui/label';
     import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from '$lib/components/ui/select';
     import Thermometer from '@lucide/svelte/icons/thermometer';
 
@@ -10,9 +9,16 @@
         onSearch: (v: string) => void;
         techs: string[];
         onTechChange: (v: string) => void;
+        selectedTech: string;
     }
 
-    let { q = '', onSearch = (v: string) => {}, techs = [] as string[], onTechChange = (v: string) => {} } = $props();
+    let {
+        q = '',
+        onSearch = (v: string) => {},
+        techs = [] as string[],
+        onTechChange = (v: string) => {},
+        selectedTech = '',
+    }: Props = $props();
 </script>
 
 <Sidebar.Root>
@@ -56,7 +62,7 @@
                     <Sidebar.MenuItem class="px-2">
                         <Select type="single" onValueChange={(v: string) => onTechChange(v)}>
                             <SelectTrigger class="w-full">
-                                <span class="truncate text-left w-full">All technologies</span>
+                                <span class="truncate text-left w-full">{selectedTech || 'All technologies'}</span>
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
