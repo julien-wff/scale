@@ -17,8 +17,8 @@
     const tags = $derived(item.tags ?? []);
 </script>
 
-<Card class="w-full overflow-hidden">
-    <CardHeader>
+<Card class="w-full overflow-hidden gap-4">
+    <CardHeader class="grid-rows-1">
         <div class="flex items-center justify-between gap-2">
             <div class="min-w-0">
                 <CardTitle class="truncate h-5">{item.name}</CardTitle>
