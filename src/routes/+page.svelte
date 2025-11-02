@@ -12,6 +12,8 @@
     import LoaderCircle from '@lucide/svelte/icons/loader-circle';
     import RefreshCw from '@lucide/svelte/icons/refresh-cw';
     import { onMount } from 'svelte';
+    import { flip } from 'svelte/animate';
+    import { fade } from 'svelte/transition';
 
     let projects: ApiProject[] = $state([]);
     let loading = $state(true);
@@ -95,7 +97,9 @@
             <ScrollArea class="h-[calc(100vh-var(--spacing)*18)]">
                 <div class="grid gap-3 pb-4">
                     {#each filtered() as p (p.id)}
-                        <ProjectCard item={toListItem(p.project_meta!)} />
+                        <div animate:flip={{ duration: 200 }} transition:fade={{ duration: 200 }}>
+                            <ProjectCard item={toListItem(p.project_meta!)} />
+                        </div>
                     {/each}
 
                     {#if filtered().length === 0 && !loading}
