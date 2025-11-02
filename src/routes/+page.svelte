@@ -73,7 +73,7 @@
             <SidebarTrigger />
             <h1 class="text-xl font-semibold">Opportunities</h1>
             <div class="ml-auto">
-                <Button variant="secondary" onclick={handleRefresh} disabled={refreshing}>
+                <Button variant="secondary" onclick={handleRefresh} disabled={refreshing} class="mr-1">
                     <div class:animate-spin={refreshing}>
                         <RefreshCw class="size-4" />
                     </div>
