@@ -14,10 +14,19 @@
     import { onMount } from 'svelte';
     import { flip } from 'svelte/animate';
     import { fade } from 'svelte/transition';
+    import ProjectDialog from '$lib/components/ProjectDialog.svelte';
 
     let projects: ApiProject[] = $state([]);
     let loading = $state(true);
     let refreshing = $state(false);
+
+    let dialogOpened = $state(false);
+    let selectedProject = $state<ApiProject | null>(null);
+
+    function handleOpenDialog(project: ApiProject) {
+        selectedProject = project;
+        dialogOpened = true;
+    }
 
     // Filters/search
     let q = $state('');
@@ -41,17 +50,9 @@
             if (!p || state !== 'PROCESSED') return false;
 
             const tags = p.metrics?.technical?.technologies || [];
-            const matchQ =
-                !q ||
-                [p.title, p.long_description, ...tags]
-                    .filter(Boolean)
-                    .join(' ')
-                    .toLowerCase()
-                    .includes(q.toLowerCase());
+            const matchQ = !q || [p.title, p.long_description, ...tags].filter(Boolean).join(' ').toLowerCase().includes(q.toLowerCase());
             const matchTech = !tech || tags.includes(tech);
-            const matchTemp =
-                (p.temperatures?.global_temperature ?? 0) >= minTemp &&
-                (p.temperatures?.global_temperature ?? 0) <= maxTemp;
+            const matchTemp = (p.temperatures?.global_temperature ?? 0) >= minTemp && (p.temperatures?.global_temperature ?? 0) <= maxTemp;
             return matchQ && matchTech && matchTemp;
         });
     }
@@ -61,9 +62,7 @@
     <AppSidebar
         {q}
         onSearch={(v: string) => (q = v)}
-        techs={Array.from(
-            new Set(projects.flatMap((p: ApiProject) => p.project_meta?.metrics?.technical?.technologies ?? [])),
-        )}
+        techs={Array.from(new Set(projects.flatMap((p: ApiProject) => p.project_meta?.metrics?.technical?.technologies ?? [])))}
         onTechChange={(v: string) => (tech = v)}
         selectedTech={tech}
     />
@@ -98,7 +97,7 @@
                 <div class="grid gap-3 pb-4">
                     {#each filtered() as p (p.id)}
                         <div animate:flip={{ duration: 200 }} transition:fade={{ duration: 200 }}>
-                            <ProjectCard item={toListItem(p.project_meta!)} />
+                            <ProjectCard item={toListItem(p.project_meta!)} onClick={() => handleOpenDialog(p)} />
                         </div>
                     {/each}
 
@@ -116,3 +115,5 @@
         </div>
     </SidebarInset>
 </SidebarProvider>
+
+<ProjectDialog bind:open={dialogOpened} project={selectedProject} />
