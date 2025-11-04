@@ -30,10 +30,10 @@
 
     const temperatureBars = $derived([
         {
-            key: 'geolocation',
-            label: 'Geographic',
-            value: clamp(Number(meta?.temperatures?.sub_temperatures?.geolocation ?? 0), 0, 25),
-            gradient: 'from-sky-500 to-sky-300',
+            key: 'budget',
+            label: 'Budget',
+            value: clamp(Number(meta?.temperatures?.sub_temperatures?.budget ?? 0), 0, 25),
+            gradient: 'from-emerald-500 to-emerald-300',
         },
         {
             key: 'technical',
@@ -48,10 +48,10 @@
             gradient: 'from-amber-500 to-amber-300',
         },
         {
-            key: 'budget',
-            label: 'Budget',
-            value: clamp(Number(meta?.temperatures?.sub_temperatures?.budget ?? 0), 0, 25),
-            gradient: 'from-emerald-500 to-emerald-300',
+            key: 'geolocation',
+            label: 'Geographic',
+            value: clamp(Number(meta?.temperatures?.sub_temperatures?.geolocation ?? 0), 0, 25),
+            gradient: 'from-sky-500 to-sky-300',
         },
     ]);
 
@@ -185,13 +185,13 @@
                                 </div>
                             </CardHeader>
                             <CardContent class="space-y-5">
-                                <div class="flex items-end justify-between gap-5">
+                                <div class="grid grid-cols-4 items-end justify-between gap-5">
                                     {#each temperatureBars as bar}
-                                        <div class="flex flex-col items-center gap-2 text-center text-sm">
-                                            <div class="relative h-32 w-7 overflow-hidden rounded-full bg-muted/70 shadow-inner">
+                                        <div class="flex flex-col items-center text-center text-sm">
+                                            <div class="relative h-32 w-7 overflow-hidden rounded-full bg-muted/70 shadow-inner mb-2">
                                                 <div class={`absolute left-1 right-1 bottom-1 rounded-full bg-linear-to-t ${bar.gradient}`} style={`height: calc(${bar.value * 4}% - .5rem)`}></div>
                                             </div>
-                                            <span class="text-xs font-medium uppercase tracking-wide text-muted-foreground">{bar.label}</span>
+                                            <span class="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1">{bar.label}</span>
                                             <span class="text-xs font-semibold tabular-nums text-foreground">{bar.value}°</span>
                                         </div>
                                     {/each}
