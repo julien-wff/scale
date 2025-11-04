@@ -57,13 +57,15 @@
     <CardFooter class="flex items-center justify-between text-sm text-muted-foreground">
         <div class="flex items-center gap-4">
             {#if item.startDate}
-                <div class="flex items-center gap-1">
-                    <Calendar class="size-4" /> <span>Start: {item.startDate}</span>
+                <div class="flex items-center gap-1 max-w-lg">
+                    <Calendar class="size-4 shrink-0" />
+                    <span class="line-clamp-1">Start: {item.startDate}</span>
                 </div>
             {/if}
             {#if item.duration}
-                <div class="flex items-center gap-1">
-                    <Clock class="size-4" /> <span>Duration: {item.duration}</span>
+                <div class="flex items-center gap-1 max-w-lg">
+                    <Clock class="size-4 shrink-0" />
+                    <span class="line-clamp-1">Duration: {item.duration}</span>
                 </div>
             {/if}
         </div>
