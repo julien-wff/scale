@@ -45,7 +45,27 @@ export type Project = {
         global_temperature?: number; // 0..100 priority
         recommendation?: string;
     };
-    budget?: unknown;
+    budget?: {
+        billing: {
+            total_billing: number;
+            daily_rate_per_profile: number;
+            total_days: number;
+            number_of_profiles: number;
+        };
+        costs: {
+            total_salary_costs: number;
+            total_logistics_costs: number;
+            total_overheads: number;
+            risk_buffer: number;
+            total_costs: number;
+        };
+        profitability: {
+            gross_margin: number;
+            net_margin: number;
+            profitability_ratio: number;
+        };
+        break_even: boolean;
+    };
     [key: string]: unknown;
 };
 

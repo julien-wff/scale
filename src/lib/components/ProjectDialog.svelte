@@ -2,9 +2,6 @@
     import * as Dialog from '$lib/components/ui/dialog/index.js';
     import { Badge } from '$lib/components/ui/badge';
     import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
-    import { Progress } from '$lib/components/ui/progress';
-    import { Separator } from '$lib/components/ui/separator';
-    import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
     import FileText from '@lucide/svelte/icons/file-text';
     import Building2 from '@lucide/svelte/icons/building-2';
     import Calendar from '@lucide/svelte/icons/calendar';
@@ -34,25 +31,25 @@
         {
             key: 'geolocation',
             label: 'Geographic',
-            value: clamp(Number(meta?.temperatures?.sub_temperatures?.geolocation ?? 0)),
+            value: clamp(Number(meta?.temperatures?.sub_temperatures?.geolocation ?? 0), 0, 25),
             gradient: 'from-sky-500 to-sky-300',
         },
         {
             key: 'technical',
             label: 'Technical',
-            value: clamp(Number(meta?.temperatures?.sub_temperatures?.technical ?? 0)),
+            value: clamp(Number(meta?.temperatures?.sub_temperatures?.technical ?? 0), 0, 25),
             gradient: 'from-violet-500 to-violet-300',
         },
         {
             key: 'time',
             label: 'Timing',
-            value: clamp(Number(meta?.temperatures?.sub_temperatures?.time ?? 0)),
+            value: clamp(Number(meta?.temperatures?.sub_temperatures?.time ?? 0), 0, 25),
             gradient: 'from-amber-500 to-amber-300',
         },
         {
             key: 'budget',
             label: 'Budget',
-            value: clamp(Number(meta?.temperatures?.sub_temperatures?.budget ?? 0)),
+            value: clamp(Number(meta?.temperatures?.sub_temperatures?.budget ?? 0), 0, 25),
             gradient: 'from-emerald-500 to-emerald-300',
         },
     ]);
@@ -79,6 +76,16 @@
             minute: '2-digit',
         }).format(date);
     }
+
+    function formatCurrency(value: number | null | undefined, currency = 'EUR') {
+        if (value == null) return 'N/A';
+
+        return new Intl.NumberFormat(undefined, {
+            style: 'currency',
+            currency,
+            maximumFractionDigits: 0,
+        }).format(value);
+    }
 </script>
 
 <Dialog.Root bind:open>
@@ -94,7 +101,7 @@
                             {#if meta.company_name}
                                 <span class="flex items-center gap-2">
                                     <Building2 class="size-4" />
-                                    <span class="font-medium text-foreground">{meta.company_name}</span>
+                                    <span>{meta.company_name}</span>
                                 </span>
                             {/if}
                             {#if project?.original_file_name}
@@ -106,45 +113,56 @@
                             {#if createdAt}
                                 <span class="flex items-center gap-2">
                                     <Calendar class="size-4" />
-                                    <span class="uppercase tracking-wide text-xs text-muted-foreground">Created {createdAt}</span>
+                                    <span class="tracking-wide text-xs text-muted-foreground">Created {createdAt}</span>
                                 </span>
                             {/if}
                             {#if updatedAt}
                                 <span class="flex items-center gap-2">
                                     <Clock class="size-4" />
-                                    <span class="uppercase tracking-wide text-xs text-muted-foreground">Updated {updatedAt}</span>
+                                    <span class="tracking-wide text-xs text-muted-foreground">Updated {updatedAt}</span>
                                 </span>
                             {/if}
                         </div>
                     </div>
                 </header>
 
-                <div class="grid gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+                <div class="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
                     <section class="space-y-8">
                         {#if longSections.length}
-                            <ScrollArea class="max-h-[65vh] pr-4">
-                                <div class="space-y-6">
-                                    {#if meta.short_description}
-                                        <article>
-                                            <h3 class="font-semibold uppercase tracking-wider text-foreground mb-2">Overview</h3>
-                                            <p class="text-base leading-relaxed text-muted-foreground mb-4">
-                                                {meta.short_description}
-                                            </p>
-                                        </article>
-                                    {/if}
+                            <div class="space-y-6">
+                                {#if meta.short_description}
+                                    <article>
+                                        <h3 class="font-semibold uppercase tracking-wider text-foreground mb-2">Overview</h3>
+                                        <p class="text-base leading-relaxed text-muted-foreground mb-4">
+                                            {meta.short_description}
+                                        </p>
+                                    </article>
+                                {/if}
 
-                                    {#each longSections as section}
-                                        <article>
-                                            <h3 class="font-semibold uppercase tracking-wider text-foreground mb-2">
-                                                {section.title}
-                                            </h3>
-                                            <p class="text-base leading-relaxed text-muted-foreground mb-4">
-                                                {section.value}
-                                            </p>
-                                        </article>
-                                    {/each}
-                                </div>
-                            </ScrollArea>
+                                {#each longSections as section}
+                                    <article>
+                                        <h3 class="font-semibold uppercase tracking-wider text-foreground mb-2">
+                                            {section.title}
+                                        </h3>
+                                        <p class="text-base leading-relaxed text-muted-foreground mb-4">
+                                            {section.value}
+                                        </p>
+                                    </article>
+                                {/each}
+
+                                {#if technologies.length}
+                                    <div>
+                                        <h3 class="font-semibold uppercase tracking-wider text-foreground mb-2">Technologies</h3>
+                                        <div class="flex flex-wrap gap-2">
+                                            {#each technologies as tech}
+                                                <Badge variant="secondary" class="rounded-full px-3 py-1 text-xs capitalize tracking-wide">
+                                                    {tech}
+                                                </Badge>
+                                            {/each}
+                                        </div>
+                                    </div>
+                                {/if}
+                            </div>
                         {:else}
                             <div class="flex h-full min-h-48 items-center justify-center rounded-lg border border-dashed bg-muted/30 px-6 text-sm text-muted-foreground">
                                 No detailed narrative provided.
@@ -154,16 +172,15 @@
 
                     <aside class="flex flex-col gap-5">
                         <Card class="border-muted/40 shadow-sm">
-                            <CardHeader class="space-y-3 pb-4">
+                            <CardHeader class="space-y-3">
                                 <div class="flex items-center justify-between">
                                     <CardTitle class="text-lg">Temperatures</CardTitle>
                                     {#if recommendation}
-                                        <Badge variant="outline" class="rounded-full px-3 py-1 text-xs font-medium uppercase tracking-wide">
-                                            {recommendation}
+                                        <Badge variant="outline" class="rounded-full px-3 py-1 text-xs font-medium tracking-wide">
+                                            {recommendation} ({globalTemperature}°)
                                         </Badge>
                                     {/if}
                                 </div>
-                                <p class="text-xs text-muted-foreground">Four pillars reflect prioritisation signals for this opportunity.</p>
                             </CardHeader>
                             <CardContent class="space-y-5">
                                 <div class="flex items-end justify-between gap-5">
@@ -177,19 +194,11 @@
                                         </div>
                                     {/each}
                                 </div>
-                                <Separator />
-                                <div class="flex flex-col gap-2">
-                                    <div class="flex items-center justify-between text-xs uppercase tracking-wide text-muted-foreground">
-                                        <span>Global priority</span>
-                                        <span>{globalTemperature}%</span>
-                                    </div>
-                                    <Progress value={globalTemperature} class="h-2" />
-                                </div>
                             </CardContent>
                         </Card>
 
                         <Card class="border-muted/40 shadow-sm">
-                            <CardHeader class="space-y-2 pb-2">
+                            <CardHeader class="space-y-2">
                                 <CardTitle class="text-lg">Key Metrics</CardTitle>
                             </CardHeader>
                             <CardContent class="space-y-3 text-sm">
@@ -260,38 +269,25 @@
                                     </div>
                                 {/if}
 
-                                {#if meta.metrics?.budget_previsions}
+                                {#if meta.budget}
                                     <div class="flex items-start gap-2">
                                         <FileText class="mt-0.5 size-4 text-muted-foreground" />
                                         <div>
                                             <p class="font-medium">Budget Insights</p>
-                                            <pre class="whitespace-pre-wrap rounded-md bg-muted/40 px-3 py-2 text-xs text-muted-foreground">{JSON.stringify(
-                                                    meta.metrics.budget_previsions,
-                                                    null,
-                                                    2,
-                                                )}</pre>
+                                            <p class="text-muted-foreground">
+                                                Billed: {formatCurrency(meta.budget.billing.total_billing)} ({meta.budget.billing.total_days} days)
+                                            </p>
+                                            <p class="text-muted-foreground">
+                                                Costs: {formatCurrency(meta.budget.costs.total_costs)}
+                                            </p>
+                                            <p class="text-muted-foreground">
+                                                Margins: {formatCurrency(meta.budget.profitability.gross_margin)} gross, {formatCurrency(meta.budget.profitability.net_margin)} net
+                                            </p>
                                         </div>
                                     </div>
                                 {/if}
                             </CardContent>
                         </Card>
-
-                        {#if technologies.length}
-                            <Card class="border-muted/40 shadow-sm">
-                                <CardHeader class="pb-2">
-                                    <CardTitle class="text-lg">Technologies</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <div class="flex flex-wrap gap-2">
-                                        {#each technologies as tech}
-                                            <Badge variant="secondary" class="rounded-full px-3 py-1 text-xs uppercase tracking-wide">
-                                                {tech}
-                                            </Badge>
-                                        {/each}
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        {/if}
                     </aside>
                 </div>
             </div>
