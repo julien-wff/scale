@@ -9,6 +9,7 @@
     import MapPin from '@lucide/svelte/icons/map-pin';
     import AlertCircle from '@lucide/svelte/icons/alert-circle';
     import type { ApiProject } from '$lib/types';
+    import GradientBackground from '$lib/components/GradientBackground.svelte';
 
     interface Props {
         open: boolean;
@@ -90,6 +91,7 @@
 
 <Dialog.Root bind:open>
     <Dialog.Content maxWidth class="max-w-7xl max-h-[calc(100vh-8rem)] overflow-y-auto">
+        <GradientBackground />
         {#if meta}
             <div class="flex flex-col gap-8">
                 <header class="flex flex-col gap-6">

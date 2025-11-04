@@ -12,25 +12,17 @@
         selectedTech: string;
     }
 
-    let {
-        q = '',
-        onSearch = (v: string) => {},
-        techs = [] as string[],
-        onTechChange = (v: string) => {},
-        selectedTech = '',
-    }: Props = $props();
+    let { q = '', onSearch = (v: string) => {}, techs = [] as string[], onTechChange = (v: string) => {}, selectedTech = '' }: Props = $props();
 </script>
 
-<Sidebar.Root>
+<Sidebar.Root class="z-20">
     <Sidebar.Header>
         <Sidebar.Menu>
             <Sidebar.MenuItem>
                 <Sidebar.MenuButton size="lg">
                     {#snippet child({ props })}
                         <a href="/" {...props}>
-                            <div
-                                class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"
-                            >
+                            <div class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                                 <Thermometer class="size-4" />
                             </div>
                             <div class="flex flex-col gap-0.5 leading-none">

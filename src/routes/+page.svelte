@@ -15,6 +15,7 @@
     import { flip } from 'svelte/animate';
     import { fade } from 'svelte/transition';
     import ProjectDialog from '$lib/components/ProjectDialog.svelte';
+    import GradientBackground from '$lib/components/GradientBackground.svelte';
 
     let projects: ApiProject[] = $state([]);
     let loading = $state(true);
@@ -68,7 +69,7 @@
     />
     <SidebarInset>
         <!-- Top bar -->
-        <div class="flex h-14 items-center gap-3 border-b px-4">
+        <div class="flex h-14 items-center gap-3 border-b px-4 z-20">
             <SidebarTrigger />
             <h1 class="text-xl font-semibold">Opportunities</h1>
             <div class="ml-auto">
@@ -92,8 +93,10 @@
         </div>
 
         <!-- Content -->
-        <div class="p-4 pb-0">
+        <div class="p-4 pb-0 z-10">
             <ScrollArea class="h-[calc(100vh-var(--spacing)*18)]">
+                <GradientBackground />
+
                 <div class="grid gap-3 pb-4">
                     {#each filtered() as p (p.id)}
                         <div animate:flip={{ duration: 200 }} transition:fade={{ duration: 200 }}>
