@@ -11,7 +11,12 @@ export async function fetchProjects(fetchFn: typeof fetch = fetch): Promise<ApiP
         throw new Error(`Failed to fetch projects (${res.status})`);
     }
 
-    const data = await res.json();
+    let data;
+    try {
+        data = await res.json();
+    } catch (error) {
+        data = [];
+    }
 
     if (Array.isArray(data)) {
         return data as ApiProject[];
