@@ -43,6 +43,8 @@
     // Sorting
     let sortOrder = $state<'asc' | 'desc'>('desc'); // default: highest temperature first
 
+    let uploadSheetOpen = $state(false);
+
     onMount(async () => {
         projects = await fetchProjects();
         loading = false;
@@ -143,7 +145,7 @@
                     </Button>
                 {/if}
 
-                <Sheet.Root>
+                <Sheet.Root bind:open={uploadSheetOpen}>
                     <Sheet.Trigger>
                         <Button class="gap-2 relative">
                             <Plus class="size-4" />
@@ -158,7 +160,7 @@
                         </Button>
                     </Sheet.Trigger>
 
-                    <UploadSidebar onUpload={handleRefresh} {projects} />
+                    <UploadSidebar onUpload={handleRefresh} {projects} visible={uploadSheetOpen} />
                 </Sheet.Root>
             </div>
         </div>
