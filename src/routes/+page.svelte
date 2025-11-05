@@ -44,6 +44,40 @@
         loading = false;
     });
 
+    onMount(() => {
+        const interval = setInterval(async () => {
+            if (projects.some(p => p.project_state === 'PROCESSING') && !refreshing && !loading) {
+                await handleRefresh();
+            }
+        }, 2000);
+
+        return () => clearInterval(interval);
+    });
+
+
+    // Revalidate the whole page data every minute
+    // If a validation is skipped because the tab is in the background, it will revalidate when the tab is back in focus
+    let reloadSkipped = $state(false);
+
+    onMount(() => {
+        const reloadInterval = setInterval(() => {
+            if (!document.hidden) {
+                handleRefresh();
+            } else {
+                reloadSkipped = true;
+            }
+        }, 1000 * 60);
+
+        return () => clearInterval(reloadInterval);
+    });
+
+    function handleVisibilityChange() {
+        if (!document.hidden && reloadSkipped) {
+            reloadSkipped = false;
+            handleRefresh();
+        }
+    }
+
     async function handleRefresh() {
         refreshing = true;
         projects = await fetchProjects();
@@ -78,6 +112,9 @@
             });
     }
 </script>
+
+
+<svelte:document onvisibilitychange={handleVisibilityChange}/>
 
 <SidebarProvider>
     <AppSidebar
