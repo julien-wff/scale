@@ -12,7 +12,7 @@
                 destructive:
                     "bg-destructive [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/70 border-transparent text-white",
                 outline: "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
-                colored: "bg-[oklch(0.95_0.05_259.815)] text-[oklch(0.45_0.1_259.815)] border border-[oklch(0.623_0.214_259.815/15%)] hover:bg-[oklch(0.93_0.05_259.815)]",
+                colored: "bg-[oklch(0.95_0.05_259.815)] text-[oklch(0.45_0.1_259.815)] border border-[oklch(0.623_0.214_259.815/15%)]",
             },
         },
         defaultVariants: {

@@ -34,7 +34,7 @@
                     <ScrollArea orientation="horizontal">
                         <div class="flex gap-1 pb-2">
                             {#each tags as t}
-                                <Badge variant="colored" class="rounded-md">{t}</Badge>
+                                <Badge variant="colored" class="rounded-md capitalize">{t}</Badge>
                             {/each}
                         </div>
                     </ScrollArea>
