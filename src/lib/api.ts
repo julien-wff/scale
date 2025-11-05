@@ -38,6 +38,24 @@ export async function uploadProject(file: File, fetchFn: typeof fetch = fetch) {
     }
 }
 
+export async function deleteProject(projectId: string, fetchFn: typeof fetch = fetch) {
+    if (!API_URL) {
+        throw new Error('PUBLIC_API_URL is not set. Cannot delete project.');
+    }
+
+    const res = await fetchFn(`${API_URL}/project`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: projectId }),
+    });
+
+    if (!res.ok) {
+        throw new Error(`Failed to delete project (${res.status})`);
+    }
+}
+
 export function getApiBase() {
     return API_URL;
 }

@@ -11,13 +11,15 @@
     import type { ApiProject } from '$lib/types';
     import GradientBackground from '$lib/components/GradientBackground.svelte';
     import { API_URL } from '$lib/api';
+    import DeleteProjectConfirmAlert from './DeleteProjectConfirmAlert.svelte';
 
     interface Props {
         open: boolean;
         project: ApiProject | null;
+        onrefresh?: () => Promise<void>;
     }
 
-    let { open = $bindable(false), project }: Props = $props();
+    let { open = $bindable(false), project, onrefresh: handleRefresh }: Props = $props();
 
     const meta = $derived(project?.project_meta ?? null);
     const technologies = $derived(meta?.metrics?.technical?.technologies ?? []);
@@ -88,7 +90,22 @@
             maximumFractionDigits: 0,
         }).format(value);
     }
+
+    let deletePopupOpen = $state(false);
+
+    function handlePageKeyPress(event: KeyboardEvent) {
+        if (event.key === 'Delete') {
+            deletePopupOpen = true;
+        }
+    }
+
+    function handleDelete() {
+        open = false;
+        handleRefresh?.();
+    }
 </script>
+
+<svelte:window on:keydown={handlePageKeyPress} />
 
 <Dialog.Root bind:open>
     <Dialog.Content maxWidth class="max-w-7xl max-h-[calc(100vh-8rem)] overflow-y-auto">
@@ -305,3 +322,5 @@
         {/if}
     </Dialog.Content>
 </Dialog.Root>
+
+<DeleteProjectConfirmAlert bind:open={deletePopupOpen} projectId={project?.project_id} ondelete={handleDelete} />
