@@ -101,7 +101,6 @@
             <h1 class="text-xl font-semibold">Opportunities</h1>
 
             <div class="ml-auto flex items-center gap-2">
-                <!-- Sort Button -->
                 <Button
                         variant="secondary"
                         onclick={() => (sortOrder = sortOrder === 'asc' ? 'desc' : 'asc')}
