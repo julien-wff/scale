@@ -17,6 +17,7 @@
     import { fade } from 'svelte/transition';
     import ProjectDialog from '$lib/components/ProjectDialog.svelte';
     import GradientBackground from '$lib/components/GradientBackground.svelte';
+    import { dev  } from '$app/environment';
 
     let projects: ApiProject[] = $state([]);
     let loading = $state(true);
@@ -148,12 +149,14 @@
                 </Button>
 
                 <!-- Refresh Button -->
-                <Button variant="secondary" onclick={handleRefresh} disabled={refreshing}>
-                    <div class:animate-spin={refreshing}>
-                        <RefreshCw class="size-4" />
-                    </div>
-                    Refresh
-                </Button>
+                {#if dev}
+                    <Button variant="secondary" onclick={handleRefresh} disabled={refreshing}>
+                        <div class:animate-spin={refreshing}>
+                            <RefreshCw class="size-4" />
+                        </div>
+                        Refresh
+                    </Button>
+                {/if}
 
                 <!-- Add Project Button -->
                 <Sheet.Root>
