@@ -2,6 +2,8 @@
 
 **Scale** is an intelligent platform that automates the analysis and qualification of project call for tenders using advanced AI capabilities. Upload tender documents, get instant insights, and prioritize opportunities based on comprehensive scoring.
 
+<img width="1629" height="1105" alt="image" src="https://github.com/user-attachments/assets/f6826ba3-dbe6-4a01-96c7-d54a1ba542e1" />
+
 ## 🎯 Overview
 
 Scale transforms how organizations handle project opportunities by automatically extracting, analyzing, and scoring tender documents. The platform combines a powerful **n8n-based backend** with a modern **SvelteKit frontend** to deliver actionable intelligence from PDF tender documents.
@@ -381,12 +383,6 @@ Tailwind CSS v4 with custom color palette defined in app.css.
 -   **shadcn-svelte**: https://shadcn-svelte.com
 -   **Tailwind CSS**: https://tailwindcss.com
 -   **n8n**: https://n8n.io
-
----
-
-## 📄 License
-
-[Specify your license here]
 
 ---
 
