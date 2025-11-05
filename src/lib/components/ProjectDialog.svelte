@@ -94,7 +94,7 @@
     let deletePopupOpen = $state(false);
 
     function handlePageKeyPress(event: KeyboardEvent) {
-        if (event.key === 'Delete') {
+        if (open && (event.key === 'Delete' || event.key === 'Backspace')) {
             deletePopupOpen = true;
         }
     }

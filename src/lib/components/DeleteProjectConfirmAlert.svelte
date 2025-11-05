@@ -27,7 +27,15 @@
             deleting = false;
         }
     }
+
+    function handleKeyPress(event: KeyboardEvent) {
+        if (open && event.key === 'Enter') {
+            handleDelete();
+        }
+    }
 </script>
+
+<svelte:window on:keydown={handleKeyPress} />
 
 <AlertDialog.Root bind:open>
     <AlertDialog.Trigger>Open</AlertDialog.Trigger>
