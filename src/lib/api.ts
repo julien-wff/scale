@@ -1,7 +1,7 @@
 import { env as publicEnv } from '$env/dynamic/public';
 import type { ApiProject } from './types';
 
-const API_URL = publicEnv.PUBLIC_API_URL?.replace(/\/$/, '') || '';
+export const API_URL = publicEnv.PUBLIC_API_URL?.replace(/\/$/, '') || '';
 
 export async function fetchProjects(fetchFn: typeof fetch = fetch): Promise<ApiProject[]> {
     const url = API_URL ? `${API_URL}/projects` : '/mock/projects.json';

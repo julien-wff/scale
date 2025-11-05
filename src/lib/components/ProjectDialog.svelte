@@ -1,30 +1,31 @@
 <script lang="ts">
     import * as Dialog from '$lib/components/ui/dialog/index.js';
-    import {Badge} from '$lib/components/ui/badge';
-    import {Card, CardContent, CardHeader, CardTitle} from '$lib/components/ui/card';
+    import { Badge } from '$lib/components/ui/badge';
+    import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
     import FileText from '@lucide/svelte/icons/file-text';
     import Building2 from '@lucide/svelte/icons/building-2';
     import Calendar from '@lucide/svelte/icons/calendar';
     import Clock from '@lucide/svelte/icons/clock';
     import MapPin from '@lucide/svelte/icons/map-pin';
     import AlertCircle from '@lucide/svelte/icons/alert-circle';
-    import type {ApiProject} from '$lib/types';
+    import type { ApiProject } from '$lib/types';
     import GradientBackground from '$lib/components/GradientBackground.svelte';
+    import { API_URL } from '$lib/api';
 
     interface Props {
         open: boolean;
         project: ApiProject | null;
     }
 
-    let {open = $bindable(false), project}: Props = $props();
+    let { open = $bindable(false), project }: Props = $props();
 
     const meta = $derived(project?.project_meta ?? null);
     const technologies = $derived(meta?.metrics?.technical?.technologies ?? []);
     const longSections = $derived(
         [
-            {title: 'Context & Objectives', value: meta?.long_description?.context_and_objectives},
-            {title: 'Results & Impact', value: meta?.long_description?.results_and_impact},
-            {title: 'Additional Details', value: meta?.long_description?.additional_details},
+            { title: 'Context & Objectives', value: meta?.long_description?.context_and_objectives },
+            { title: 'Results & Impact', value: meta?.long_description?.results_and_impact },
+            { title: 'Additional Details', value: meta?.long_description?.additional_details },
         ].filter(section => Boolean(section.value)),
     );
 
@@ -91,7 +92,7 @@
 
 <Dialog.Root bind:open>
     <Dialog.Content maxWidth class="max-w-7xl max-h-[calc(100vh-8rem)] overflow-y-auto">
-        <GradientBackground/>
+        <GradientBackground />
         {#if meta}
             <div class="flex flex-col gap-8">
                 <header class="flex flex-col gap-6">
@@ -102,25 +103,25 @@
                         <div class="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
                             {#if meta.company_name}
                                 <span class="flex items-center gap-2">
-                                    <Building2 class="size-4"/>
+                                    <Building2 class="size-4" />
                                     <span>{meta.company_name}</span>
                                 </span>
                             {/if}
                             {#if project?.original_file_name}
-                                <span class="flex items-center gap-2">
-                                    <FileText class="size-4"/>
+                                <a class="flex items-center gap-2 underline" href="{API_URL}/pdf?id={project.project_id}" target="_blank" tabindex="-1">
+                                    <FileText class="size-4" />
                                     <span>{project.original_file_name}.pdf</span>
-                                </span>
+                                </a>
                             {/if}
                             {#if createdAt}
                                 <span class="flex items-center gap-2">
-                                    <Calendar class="size-4"/>
+                                    <Calendar class="size-4" />
                                     <span class="tracking-wide text-xs text-muted-foreground">Created {createdAt}</span>
                                 </span>
                             {/if}
                             {#if updatedAt}
                                 <span class="flex items-center gap-2">
-                                    <Clock class="size-4"/>
+                                    <Clock class="size-4" />
                                     <span class="tracking-wide text-xs text-muted-foreground">Updated {updatedAt}</span>
                                 </span>
                             {/if}
@@ -134,8 +135,7 @@
                             <div class="space-y-6">
                                 {#if meta.short_description}
                                     <article>
-                                        <h3 class="font-semibold uppercase tracking-wider text-foreground mb-2">
-                                            Overview</h3>
+                                        <h3 class="font-semibold uppercase tracking-wider text-foreground mb-2">Overview</h3>
                                         <p class="text-base leading-relaxed text-muted-foreground mb-4">
                                             {meta.short_description}
                                         </p>
@@ -155,12 +155,10 @@
 
                                 {#if technologies.length}
                                     <div>
-                                        <h3 class="font-semibold uppercase tracking-wider text-foreground mb-2">
-                                            Technologies</h3>
+                                        <h3 class="font-semibold uppercase tracking-wider text-foreground mb-2">Technologies</h3>
                                         <div class="flex flex-wrap gap-2">
                                             {#each technologies as tech}
-                                                <Badge variant="colored"
-                                                       class="rounded-full px-3 py-1 text-xs capitalize tracking-wide">
+                                                <Badge variant="colored" class="rounded-full px-3 py-1 text-xs capitalize tracking-wide">
                                                     {tech}
                                                 </Badge>
                                             {/each}
@@ -181,8 +179,7 @@
                                 <div class="flex items-center justify-between">
                                     <CardTitle class="text-lg">Temperatures</CardTitle>
                                     {#if recommendation}
-                                        <Badge variant="outline"
-                                               class="rounded-full px-3 py-1 text-xs font-medium tracking-wide">
+                                        <Badge variant="outline" class="rounded-full px-3 py-1 text-xs font-medium tracking-wide">
                                             {recommendation} ({globalTemperature}°)
                                         </Badge>
                                     {/if}
@@ -193,12 +190,10 @@
                                     {#each temperatureBars as bar}
                                         <div class="flex flex-col items-center text-center text-sm">
                                             <div class="relative h-32 w-7 overflow-hidden rounded-full bg-muted/70 shadow-inner mb-2">
-                                                <div class={`absolute left-1 right-1 bottom-1 rounded-full bg-linear-to-t ${bar.gradient}`}
-                                                     style={`height: calc(${bar.value * 4}% - .5rem)`}></div>
+                                                <div class={`absolute left-1 right-1 bottom-1 rounded-full bg-linear-to-t ${bar.gradient}`} style={`height: calc(${bar.value * 4}% - .5rem)`}></div>
                                             </div>
                                             <span class="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1">{bar.label}</span>
-                                            <span class="text-xs font-semibold tabular-nums text-foreground">{bar.value}
-                                                °</span>
+                                            <span class="text-xs font-semibold tabular-nums text-foreground">{bar.value}°</span>
                                         </div>
                                     {/each}
                                 </div>
@@ -212,14 +207,14 @@
                             <CardContent class="space-y-3 text-sm">
                                 {#if meta.metrics?.geolocalisation?.location}
                                     <div class="flex items-start gap-2">
-                                        <MapPin class="mt-0.5 size-4 text-muted-foreground"/>
+                                        <MapPin class="mt-0.5 size-4 text-muted-foreground" />
                                         <div>
                                             <p class="font-medium">Location</p>
                                             <p class="text-muted-foreground">
                                                 {meta.metrics.geolocalisation.location}
                                                 {#if meta.metrics.geolocalisation.type}
                                                     <span class="capitalize">
-                                                    &nbsp;• {meta.metrics.geolocalisation.type}
+                                                        &nbsp;• {meta.metrics.geolocalisation.type}
                                                     </span>
                                                 {/if}
                                             </p>
@@ -234,7 +229,7 @@
 
                                 {#if meta.metrics?.time?.start_date || meta.metrics?.time?.duration}
                                     <div class="flex items-start gap-2">
-                                        <Calendar class="mt-0.5 size-4 text-muted-foreground"/>
+                                        <Calendar class="mt-0.5 size-4 text-muted-foreground" />
                                         <div>
                                             <p class="font-medium">Timeline</p>
                                             <p class="text-muted-foreground">
@@ -250,7 +245,8 @@
                                             </p>
                                             {#if meta.metrics?.time?.urgency}
                                                 <p class="text-xs text-muted-foreground">
-                                                    Urgency: {meta.metrics.time.urgency}</p>
+                                                    Urgency: {meta.metrics.time.urgency}
+                                                </p>
                                             {/if}
                                         </div>
                                     </div>
@@ -258,7 +254,7 @@
 
                                 {#if meta.metrics?.technical?.expertise_level || meta.metrics?.technical?.number_of_positions}
                                     <div class="flex items-start gap-2">
-                                        <AlertCircle class="mt-0.5 size-4 text-muted-foreground"/>
+                                        <AlertCircle class="mt-0.5 size-4 text-muted-foreground" />
                                         <div>
                                             <p class="font-medium">Profile</p>
                                             <p class="text-muted-foreground">
@@ -274,8 +270,7 @@
                                                 {/if}
                                             </p>
                                             {#if meta.metrics?.technical?.internal_fit}
-                                                <p class="text-xs text-muted-foreground">Internal
-                                                    fit: {meta.metrics.technical.internal_fit}</p>
+                                                <p class="text-xs text-muted-foreground">Internal fit: {meta.metrics.technical.internal_fit}</p>
                                             {/if}
                                         </div>
                                     </div>
@@ -283,7 +278,7 @@
 
                                 {#if meta.budget}
                                     <div class="flex items-start gap-2">
-                                        <FileText class="mt-0.5 size-4 text-muted-foreground"/>
+                                        <FileText class="mt-0.5 size-4 text-muted-foreground" />
                                         <div>
                                             <p class="font-medium">Budget Insights</p>
                                             <p class="text-muted-foreground">
