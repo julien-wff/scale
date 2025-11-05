@@ -157,7 +157,7 @@
                                         <h3 class="font-semibold uppercase tracking-wider text-foreground mb-2">Technologies</h3>
                                         <div class="flex flex-wrap gap-2">
                                             {#each technologies as tech}
-                                                <Badge variant="secondary" class="rounded-full px-3 py-1 text-xs capitalize tracking-wide">
+                                                <Badge variant="colored" class="rounded-full px-3 py-1 text-xs capitalize tracking-wide">
                                                     {tech}
                                                 </Badge>
                                             {/each}
