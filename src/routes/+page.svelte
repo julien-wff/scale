@@ -143,7 +143,7 @@
 
             <div class="ml-auto flex items-center gap-2">
                 <Button
-                        variant="secondary"
+                        variant="outlined"
                         onclick={() => (sortOrder = sortOrder === 'asc' ? 'desc' : 'asc')}
                         class="gap-1"
                 >
@@ -153,7 +153,7 @@
 
                 <!-- Refresh Button -->
                 {#if dev}
-                    <Button variant="secondary" onclick={handleRefresh} disabled={refreshing}>
+                    <Button variant="outlined" onclick={handleRefresh} disabled={refreshing}>
                         <div class:animate-spin={refreshing}>
                             <RefreshCw class="size-4"/>
                         </div>
