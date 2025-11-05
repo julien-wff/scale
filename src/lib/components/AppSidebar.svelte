@@ -60,7 +60,7 @@
                                 <SelectGroup>
                                     <SelectItem value="">All</SelectItem>
                                     {#each techs as t}
-                                        <SelectItem value={t}>{t}</SelectItem>
+                                        <SelectItem class="capitalize" value={t}>{t}</SelectItem>
                                     {/each}
                                 </SelectGroup>
                             </SelectContent>
