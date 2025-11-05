@@ -28,8 +28,9 @@ export type Project = {
             logistics_details?: string;
         };
         time?: {
-            start_date?: string; // e.g., "ASAP"
-            duration?: string; // e.g., "6 months" or a label
+            response_deadline: string;
+            start_date: string;
+            end_date_or_duration: string;
             urgency?: string | boolean;
         };
         technical?: {
@@ -88,7 +89,7 @@ export function toListItem(p: Project): ProjectListItem {
         company: p.company_name,
         tags: p.metrics?.technical?.technologies ?? [],
         startDate: p.metrics?.time?.start_date,
-        duration: p.metrics?.time?.duration,
+        duration: p.metrics?.time?.end_date_or_duration,
         description: p.short_description ?? p.long_description?.context_and_objectives,
         temperature: clamp(Number(p.temperatures?.global_temperature ?? 0), 0, 100),
     };

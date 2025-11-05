@@ -133,13 +133,13 @@
                             {#if createdAt}
                                 <span class="flex items-center gap-2">
                                     <Calendar class="size-4" />
-                                    <span class="tracking-wide text-xs text-muted-foreground">Created {createdAt}</span>
+                                    <span class="tracking-wide text-xs text-muted-foreground">Ingested on {createdAt}</span>
                                 </span>
                             {/if}
                             {#if updatedAt}
                                 <span class="flex items-center gap-2">
                                     <Clock class="size-4" />
-                                    <span class="tracking-wide text-xs text-muted-foreground">Updated {updatedAt}</span>
+                                    <span class="tracking-wide text-xs text-muted-foreground">Updated on {updatedAt}</span>
                                 </span>
                             {/if}
                         </div>
@@ -244,22 +244,26 @@
                                     </div>
                                 {/if}
 
-                                {#if meta.metrics?.time?.start_date || meta.metrics?.time?.duration}
+                                {#if meta.metrics?.time?.start_date || meta.metrics?.time?.end_date_or_duration}
                                     <div class="flex items-start gap-2">
                                         <Calendar class="mt-0.5 size-4 text-muted-foreground" />
                                         <div>
                                             <p class="font-medium">Timeline</p>
-                                            <p class="text-muted-foreground">
-                                                {#if meta.metrics?.time?.start_date}
-                                                    Start {meta.metrics.time.start_date}
-                                                {/if}
-                                                {#if meta.metrics?.time?.duration}
-                                                    {#if meta.metrics?.time?.start_date}
-                                                        ,
-                                                    {/if}
-                                                    Duration {meta.metrics.time.duration}
-                                                {/if}
-                                            </p>
+                                            {#if meta.metrics?.time?.start_date}
+                                                <p class="text-muted-foreground">
+                                                    Start: {meta.metrics.time.start_date}
+                                                </p>
+                                            {/if}
+                                            {#if meta.metrics?.time?.end_date_or_duration}
+                                                <p class="text-muted-foreground">
+                                                    Duration: {meta.metrics.time.end_date_or_duration}
+                                                </p>
+                                            {/if}
+                                            {#if meta.metrics?.time?.response_deadline}
+                                                <p class="text-muted-foreground">
+                                                    Response Deadline: {meta.metrics.time.response_deadline}
+                                                </p>
+                                            {/if}
                                             {#if meta.metrics?.time?.urgency}
                                                 <p class="text-xs text-muted-foreground">
                                                     Urgency: {meta.metrics.time.urgency}
