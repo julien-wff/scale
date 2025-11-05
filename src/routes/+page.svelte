@@ -11,6 +11,7 @@
     import Plus from '@lucide/svelte/icons/plus';
     import LoaderCircle from '@lucide/svelte/icons/loader-circle';
     import RefreshCw from '@lucide/svelte/icons/refresh-cw';
+    import Thermometer from '@lucide/svelte/icons/thermometer';
     import { onMount } from 'svelte';
     import { flip } from 'svelte/animate';
     import { fade } from 'svelte/transition';
@@ -35,6 +36,9 @@
     let minTemp = $state(0);
     let maxTemp = $state(100);
 
+    // Sorting
+    let sortOrder = $state<'asc' | 'desc'>('desc'); // default: highest temperature first
+
     onMount(async () => {
         projects = await fetchProjects();
         loading = false;
@@ -47,38 +51,75 @@
     }
 
     function filtered(): ApiProject[] {
-        return projects.filter(({ project_meta: p, project_state: state }: ApiProject) => {
-            if (!p || state !== 'PROCESSED') return false;
+        return projects
+            .filter(({ project_meta: p, project_state: state }: ApiProject) => {
+                if (!p || state !== 'PROCESSED') return false;
 
-            const tags = p.metrics?.technical?.technologies || [];
-            const matchQ = !q || [p.title, p.long_description, ...tags].filter(Boolean).join(' ').toLowerCase().includes(q.toLowerCase());
-            const matchTech = !tech || tags.includes(tech);
-            const matchTemp = (p.temperatures?.global_temperature ?? 0) >= minTemp && (p.temperatures?.global_temperature ?? 0) <= maxTemp;
-            return matchQ && matchTech && matchTemp;
-        });
+                const tags = p.metrics?.technical?.technologies || [];
+                const temp = p.temperatures?.global_temperature ?? 0;
+
+                const matchQ =
+                    !q ||
+                    [p.title, p.long_description, ...tags]
+                        .filter(Boolean)
+                        .join(' ')
+                        .toLowerCase()
+                        .includes(q.toLowerCase());
+
+                const matchTech = !tech || tags.includes(tech);
+                const matchTemp = temp >= minTemp && temp <= maxTemp;
+
+                return matchQ && matchTech && matchTemp;
+            })
+            .sort((a, b) => {
+                const tempA = a.project_meta?.temperatures?.global_temperature ?? 0;
+                const tempB = b.project_meta?.temperatures?.global_temperature ?? 0;
+                return sortOrder === 'asc' ? tempA - tempB : tempB - tempA;
+            });
     }
 </script>
 
 <SidebarProvider>
     <AppSidebar
-        {q}
-        onSearch={(v: string) => (q = v)}
-        techs={Array.from(new Set(projects.flatMap((p: ApiProject) => p.project_meta?.metrics?.technical?.technologies ?? [])))}
-        onTechChange={(v: string) => (tech = v)}
-        selectedTech={tech}
+            {q}
+            onSearch={(v: string) => (q = v)}
+            techs={Array.from(
+            new Set(
+                projects.flatMap(
+                    (p: ApiProject) => p.project_meta?.metrics?.technical?.technologies ?? []
+                )
+            )
+        )}
+            onTechChange={(v: string) => (tech = v)}
+            selectedTech={tech}
     />
+
     <SidebarInset>
         <!-- Top bar -->
         <div class="flex h-14 items-center gap-3 border-b px-4 z-20">
             <SidebarTrigger />
             <h1 class="text-xl font-semibold">Opportunities</h1>
-            <div class="ml-auto">
-                <Button variant="secondary" onclick={handleRefresh} disabled={refreshing} class="mr-1">
+
+            <div class="ml-auto flex items-center gap-2">
+                <!-- Sort Button -->
+                <Button
+                        variant="secondary"
+                        onclick={() => (sortOrder = sortOrder === 'asc' ? 'desc' : 'asc')}
+                        class="gap-1"
+                >
+                    <Thermometer class="size-4" />
+                    {sortOrder === 'asc' ? 'High ← Low' : 'High → Low'}
+                </Button>
+
+                <!-- Refresh Button -->
+                <Button variant="secondary" onclick={handleRefresh} disabled={refreshing}>
                     <div class:animate-spin={refreshing}>
                         <RefreshCw class="size-4" />
                     </div>
                     Refresh
                 </Button>
+
+                <!-- Add Project Button -->
                 <Sheet.Root>
                     <Sheet.Trigger>
                         <Button class="gap-2">
