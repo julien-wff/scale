@@ -18,6 +18,7 @@
     import ProjectDialog from '$lib/components/ProjectDialog.svelte';
     import GradientBackground from '$lib/components/GradientBackground.svelte';
     import { dev } from '$app/environment';
+    import { notificationState } from '$lib/stores/notification.svelte';
 
     let projects: ApiProject[] = $state([]);
     let loading = $state(true);
@@ -39,6 +40,9 @@
 
     // Reactive array of processing projects
     const processingProjects = $derived(projects.filter(p => p.project_state === 'PROCESSING'));
+    $effect(() => {
+        notificationState.processingProjects = processingProjects.length;
+    })
 
     // Sorting
     let sortOrder = $state<'asc' | 'desc'>('desc'); // default: highest temperature first
