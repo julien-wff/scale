@@ -18,16 +18,20 @@
 
     // Upload
     let file: File | null = $state(null);
+    let uploading = $state(false);
 
     async function handleUpload() {
-        if (!file) return;
+        if (!file || uploading) return;
         try {
+            uploading = true;
             await uploadProject(file);
             file = null;
             onUpload?.();
         } catch (e) {
             console.error(e);
             alert('Upload failed. Check API URL.');
+        } finally {
+            uploading = false;
         }
     }
 
@@ -66,7 +70,7 @@
                 }}
             />
 
-            <Button class="gap-2" onclick={handleUpload} disabled={!file}>
+            <Button class="gap-2" onclick={handleUpload} disabled={!file || uploading}>
                 <Upload class="size-4" />
                 Upload
             </Button>
