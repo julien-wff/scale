@@ -14,6 +14,7 @@ export type Project = {
     projectId: string;
     filename?: string;
     title: string; // Project name
+    managerId?: number;
     company_name: string;
     short_description?: string;
     long_description?: {

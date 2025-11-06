@@ -12,6 +12,7 @@
     import GradientBackground from '$lib/components/GradientBackground.svelte';
     import { API_URL } from '$lib/api';
     import DeleteProjectConfirmAlert from './DeleteProjectConfirmAlert.svelte';
+    import ManagerSwitcher from './ManagerSwitcher.svelte';
 
     interface Props {
         open: boolean;
@@ -103,6 +104,31 @@
         open = false;
         handleRefresh?.();
     }
+
+    const managers = [
+        {
+            id: 1,
+            name: 'John Doe',
+            specialities: 'Software development',
+        },
+        {
+            id: 2,
+            name: 'Jane Smith',
+            specialities: 'Data science / data engineering / IA',
+        },
+        {
+            id: 3,
+            name: 'Alice Johnson',
+            specialities: 'Software development',
+        },
+        {
+            id: 4,
+            name: 'Bob Brown',
+            specialities: 'Dev/Ops',
+        },
+    ];
+
+    let selectedManager = $derived(meta ? (managers.find(m => m.id === meta.managerId) ?? null) : null);
 </script>
 
 <svelte:window on:keydown={handlePageKeyPress} />
@@ -216,6 +242,17 @@
                                 </div>
                             </CardContent>
                         </Card>
+
+                        {#if typeof meta.managerId === 'number' && selectedManager}
+                            <Card class="border-muted/40 shadow-sm gap-4">
+                                <CardHeader class="">
+                                    <CardTitle class="text-lg">Project Manager</CardTitle>
+                                </CardHeader>
+                                <CardContent class="text-sm">
+                                    <ManagerSwitcher {managers} bind:selectedManagerId={meta.managerId} />
+                                </CardContent>
+                            </Card>
+                        {/if}
 
                         <Card class="border-muted/40 shadow-sm">
                             <CardHeader class="space-y-2">
